@@ -28,13 +28,7 @@ class TransitionScene(Scene):
         if config.music_on == True:
            config.main_menu_music.play()
         elif config.music_on == False:
-           config.main_menu_music.pause()
-           
-        if config.level_difficulty < 5:
-           self.text = 'Would you like to go to the next level?' 
-        else:
-            self.text = 'You completed all the levels! Return to the levels scene?'
-            self.no_button.remove_from_parent()
+           config.main_menu_music.pause()                  
         
         # add blue sky background 
         self.background = SpriteNode('./assets/sprites/main_menu_background.PNG',
@@ -58,6 +52,35 @@ class TransitionScene(Scene):
                                  position = bush_2_position,
                                  scale = 0.45)
                                  
+        # This shows yes button                                                                  
+        yes_button_position = Vector2()
+        yes_button_position.y = self.size_of_screen_y - 500
+        yes_button_position.x = self.center_of_screen_x - 250    
+        self.yes_button = SpriteNode('./assets/sprites/yes_button.PNG',
+                                       parent = self, 
+                                       position = yes_button_position,
+                                       scale = 0.3)                
+        
+        # This shows no button                                                                 
+        no_button_position = Vector2()
+        no_button_position.y = self.size_of_screen_y - 500
+        no_button_position.x = self.center_of_screen_x + 250                
+        self.no_button = SpriteNode('./assets/sprites/no_button.PNG',
+                                          parent = self, 
+                                          position = no_button_position,
+                                          scale = 0.3)      
+                                          
+        if config.level_difficulty < 5:
+           self.text = 'Would you like to go to the next level?' 
+        else:
+            self.text = 'You completed all the levels! Return to levels scene?'
+            self.no_button.remove_from_parent()      
+            self.yes_button.remove_from_parent()           
+            self.yes_button = SpriteNode('./assets/sprites/yes_button.PNG',
+                                       parent = self, 
+                                       position = (self.center_of_screen_x, yes_button_position.y),
+                                       scale = 0.3)                                                                                                                                                                         
+                                 
         go_to_next_level_label_position = Vector2()   
         go_to_next_level_label_position.y = self.center_of_screen_y + 100
         go_to_next_level_label_position.x = self.center_of_screen_x                                                 
@@ -65,25 +88,7 @@ class TransitionScene(Scene):
                                      font = ('Marker Felt', 45),
                                      color = 'black',
                                      parent = self,
-                                     position = go_to_next_level_label_position)  
-                                     
-        # This shows music button                                                                  
-        yes_button_position = Vector2()
-        yes_button_position.y = self.size_of_screen_y - 500
-        yes_button_position.x = self.center_of_screen_x - 250                
-        self.yes_button = SpriteNode('./assets/sprites/yes_button.PNG',
-                                       parent = self, 
-                                       position = yes_button_position,
-                                       scale = 0.3)         
-        
-        # This shows no music button                                                                 
-        no_button_position = Vector2()
-        no_button_position.y = self.size_of_screen_y - 500
-        no_button_position.x = self.center_of_screen_x + 250                
-        self.no_button = SpriteNode('./assets/sprites/no_button.PNG',
-                                          parent = self, 
-                                          position = no_button_position,
-                                          scale = 0.3)                                  
+                                     position = go_to_next_level_label_position)                                                                                                                                                                                       
                                      
     def update(self):
         # this method is called, hopefully, 60 times a second

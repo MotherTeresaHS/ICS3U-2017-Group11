@@ -9,7 +9,6 @@ import time
 import config
 import ui
 
-from settings_scene import *
 from lose_scene import *
 from win_scene import *
 from numpy import random
@@ -42,7 +41,7 @@ class MainGameScene(Scene):
         self.coins = []
         self.hearts = []
         self.police_attack_speed = 15.0
-        self.police_attack_rate = 5
+        self.police_attack_rate = 2
         self.number_coins_collected = 0
         self.character_gender = config.gender_type       
         self.stop_missiles = False
@@ -298,15 +297,10 @@ class MainGameScene(Scene):
               sound.play_effect('8ve:8ve-tap-mellow')    
               self.loading_background .remove_from_parent()
               self.back_arrow_button.remove_from_parent()
-              self.settings_button.remove_from_parent()
               self.home_button_game_scene.remove_from_parent()
               self.levels_button.remove_from_parent() 
               self.stop_missiles = False
               self.table_view_button_down = True
-           # This transitions to seetings_scene                                 
-           elif self.settings_button.frame.contains_point(touch.location): 
-              sound.play_effect('8ve:8ve-tap-mellow') 
-              self.present_modal_scene(SettingsScene())	
            # This transitions to main_menu_scene       
            elif self.home_button_game_scene.frame.contains_point(touch.location): 
               config.main_game_music.stop()   
@@ -421,20 +415,11 @@ class MainGameScene(Scene):
                                             parent = self, 
                                             position = back_arrow_button_position,
                                             scale = 0.6) 
-                                            
-        # This shows settings button                                  
-        settings_button_position = Vector2()
-        settings_button_position.y = self.center_of_screen_y + 120
-        settings_button_position.x = self.center_of_screen_x                   
-        self.settings_button = SpriteNode('./assets/sprites/settings_button.PNG',
-                                          parent = self, 
-                                          position = settings_button_position,
-                                          scale = 0.35) 
                                           
         # This shows home button                           
         home_button_game_scene_position = Vector2()
-        home_button_game_scene_position.y = self.center_of_screen_y 
-        home_button_game_scene_position.x = self.center_of_screen_x                   
+        home_button_game_scene_position.y = self.center_of_screen_y + 100
+        home_button_game_scene_position.x = self.center_of_screen_x                 
         self.home_button_game_scene = SpriteNode('./assets/sprites/home_button_game_scene.PNG',
                                                  parent = self, 
                                                  position = home_button_game_scene_position,
@@ -442,7 +427,7 @@ class MainGameScene(Scene):
                                                                  
         # This shows levels button                               
         levels_button_position = Vector2()
-        levels_button_position.y = self.center_of_screen_y - 120
+        levels_button_position.y = self.center_of_screen_y - 50
         levels_button_position.x = self.center_of_screen_x                   
         self.levels_button = SpriteNode('./assets/sprites/levels_button.PNG',
                                         parent = self, 
@@ -475,7 +460,7 @@ class MainGameScene(Scene):
            self.robber = SpriteNode('./assets/sprites/girl_thief_right.PNG',
                                     parent = self, 
                                     position = new_robber_position,
-                                    scale = 0.11)#097)                 
+                                    scale = 0.11)               
                                     
     def create_bush_and_coins(self):	
         # This creates hearts sprite in which each heart is evenly spaced out
