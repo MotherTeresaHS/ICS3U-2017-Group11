@@ -1,4 +1,4 @@
-# Created by: Sidney Kang
+# Created by: Shuvaethy Neill
 # Created on: Jan 2018
 # Created for: ICS3U
 # This scene shows the main menu.
@@ -6,8 +6,8 @@
 from scene import *
 import sound
 import ui
-import config
 
+import config
 from levels_scene import *
 from settings_scene import *
 from credits_scene import *
@@ -21,7 +21,6 @@ class MainMenuScene(Scene):
         self.size_of_screen_y = self.size.y
         self.center_of_screen_x = self.size_of_screen_x/2
         self.center_of_screen_y = self.size_of_screen_y/2 
-        self.scale_size = 0.4
 
         # This allows sound effects to play or to not play 
         # based on whether the play sound effects or no sound effects was pressed (in settings scene)               
@@ -43,7 +42,7 @@ class MainMenuScene(Scene):
                                      parent = self, 
                                      size = self.size)                                                                         
 
-        # add bush on right                                                         
+        # add bush on right (for background)                                                        
         bush_position = Vector2()
         bush_position.y = (self.size_of_screen_y - (2 * (self.center_of_screen_y))) + 100
         bush_position.x = self.size_of_screen_x - 100                           
@@ -52,7 +51,7 @@ class MainMenuScene(Scene):
                                position = bush_position,
                                scale = 0.45)       
 
-        # add bush on left                                                              
+        # add bush on left (for background)                                                         
         bush_2_position = Vector2()
         bush_2_position.y = (self.size_of_screen_y - (2 * (self.center_of_screen_y))) + 100
         bush_2_position.x = (self.size_of_screen_x - (2 * (self.center_of_screen_x))) + 100                               

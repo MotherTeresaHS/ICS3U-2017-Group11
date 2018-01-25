@@ -35,21 +35,12 @@ class LoseScene(Scene):
                                         parent = self, 
                                         position = background_position,
                                         size = self.size/1.2) 
-        # for girl robber                                
+        # show lose scene for girl robber                                
         else:
            self.background = SpriteNode('./assets/sprites/lose_scene_background_female.PNG',
                                         parent = self, 
                                         position = background_position,
                                         size = self.size/1.2)                             
-
-        # This shows home button
-        home_button_position = Vector2()
-        home_button_position.y = self.size_of_screen_y - 70
-        home_button_position.x = (self.size_of_screen_x - (2 * (self.center_of_screen_x))) + 100                   
-        self.home_button = SpriteNode('./assets/sprites/home_button.PNG',
-                                      parent = self, 
-                                      position = home_button_position,
-                                      scale = 0.25)   
                                       
         # This shows next button                                           
         next_arrow_button_position = Vector2()
@@ -84,8 +75,8 @@ class LoseScene(Scene):
     
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
-        pass
-               
+        
+        # This transitions to the main game scene         
         if self.next_arrow_button.frame.contains_point(touch.location):
            sound.play_effect('8ve:8ve-tap-mellow')
            config.game_over = True    

@@ -40,7 +40,7 @@ class LevelsScene(Scene):
                                      parent = self, 
                                      size = self.size)
 
-        # add bush on right                                                          
+        # add bush on right (for backgound)                                                         
         bush_position = Vector2()
         bush_position.y = (self.size_of_screen_y - (2 * (self.center_of_screen_y))) + 100
         bush_position.x = self.size_of_screen_x - 100                           
@@ -49,7 +49,7 @@ class LevelsScene(Scene):
                                position = bush_position,
                                scale = 0.45)       
         
-        # add bush on left                                                              
+        # add bush on left (for background)                                                          
         bush_2_position = Vector2()
         bush_2_position.y = (self.size_of_screen_y - (2 * (self.center_of_screen_y))) + 100
         bush_2_position.x = (self.size_of_screen_x - (2 * (self.center_of_screen_x))) + 100                               
@@ -66,7 +66,8 @@ class LevelsScene(Scene):
                                       parent = self, 
                                       position = home_button_position,
                                       scale = 0.25)                                                                                                                                                                               
-
+        
+        # This shows levels label
         levels_title_position = Vector2()
         levels_title_position.y = self.center_of_screen_y + 270
         levels_title_position.x = self.center_of_screen_x                      
@@ -104,13 +105,12 @@ class LevelsScene(Scene):
 
     def update(self):
         # this method is called, hopefully, 60 times a second
-        
-         #if config.game_won == True:
-            #config.game_won = False
-           
+         
+         # This transitions to main menu scene
          if config.game_over == True:
             self.dismiss_modal_scene()  
-                    
+         
+         # This transitions to main menu scene                      
          if config.home_menu_pressed == True:
             config.home_menu_pressed = False
             self.dismiss_modal_scene()
@@ -125,24 +125,27 @@ class LevelsScene(Scene):
     
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
-        pass
         
+        # This transitions to main menu scene
         if self.home_button.frame.contains_point(touch.location):
            sound.play_effect('8ve:8ve-tap-mellow')
            self.dismiss_modal_scene()
         
+        # This transitions to level 1 of game
         if self.level_1_button.frame.contains_point(touch.location):
            sound.play_effect('8ve:8ve-tap-mellow')
            config.main_menu_music.stop()
            config.game_won = False
            config.level_difficulty = 3
            self.present_modal_scene(MainGameScene()) 
+        # This transitions to level 2 of game   
         elif self.level_2_button.frame.contains_point(touch.location): 
            sound.play_effect('8ve:8ve-tap-mellow')
            config.main_menu_music.stop()
            config.game_won = False
            config.level_difficulty = 4
            self.present_modal_scene(MainGameScene())
+        # This transitions to level 3 of game
         elif self.level_3_button.frame.contains_point(touch.location):
            sound.play_effect('8ve:8ve-tap-mellow')
            config.main_menu_music.stop()

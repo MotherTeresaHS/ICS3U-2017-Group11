@@ -4,11 +4,10 @@
 # This scene shows the winning scene.
 
 from scene import *
-import config
 import sound
-import time
 import ui
 
+import config
 from transition_scene import *
 
 class WinScene(Scene):
@@ -29,8 +28,7 @@ class WinScene(Scene):
                                 
         background_position = Vector2()
         background_position.y = self.center_of_screen_y + 100
-        background_position.x = self.center_of_screen_x                              
-    
+        background_position.x = self.center_of_screen_x                                  
         # add lose scene background 
         if config.gender_type == './assets/sprites/boy_thief.PNG':                                                                 
            self.background = SpriteNode('./assets/sprites/win_scene_background.PNG',
@@ -44,7 +42,7 @@ class WinScene(Scene):
                                         position = background_position,
                                         size = self.size/1.1)
         
-
+        # This shows 'YOU WIN' label
         win_label_position = Vector2()   
         win_label_position.y = self.center_of_screen_y - 275
         win_label_position.x = self.center_of_screen_x                                           
@@ -65,7 +63,8 @@ class WinScene(Scene):
 
     def update(self):
         # this method is called, hopefully, 60 times a second
-                   
+        
+        # This transitions to main game scene           
         if config.game_over == True or config.game_won == True:
            self.dismiss_modal_scene()          
            
@@ -79,9 +78,8 @@ class WinScene(Scene):
     
     def touch_ended(self, touch):
         # this method is called, when user releases a finger from the screen
-        pass
         
-        # This transitions to level scene
+        # This transitions to transition scene
         if self.next_arrow_button.frame.contains_point(touch.location):
            sound.play_effect('8ve:8ve-tap-mellow')    
            self.present_modal_scene(TransitionScene())                      

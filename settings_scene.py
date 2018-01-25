@@ -19,10 +19,9 @@ class SettingsScene(Scene):
         self.size_of_screen_y = self.size.y
         self.center_of_screen_x = self.size_of_screen_x/2
         self.center_of_screen_y = self.size_of_screen_y/2 
-        self.girl_button_down = False
-        self.boy_button_down = False
-        self.button_click = sound.play_effect('casino:ChipLay2', 50)
         
+        self.girl_button_down = False
+        self.boy_button_down = False        
         self.choose_character_button_touched_once = False
         
         # This allows sound effects to play or to not play 
@@ -46,7 +45,7 @@ class SettingsScene(Scene):
                                      parent = self, 
                                      size = self.size)
         
-        # add bush for background                                                           
+        # add bush on right (for background)                                                           
         bush_position = Vector2()
         bush_position.y = (self.size_of_screen_y - (2 * (self.center_of_screen_y))) + 100
         bush_position.x = self.size_of_screen_x - 100                           
@@ -55,7 +54,7 @@ class SettingsScene(Scene):
                                position = bush_position,
                                scale = 0.45)       
        
-        # add bush for background                                
+        # add bush on left (for background)                                
         bush_2_position = Vector2()
         bush_2_position.y = (self.size_of_screen_y - (2 * (self.center_of_screen_y))) + 100
         bush_2_position.x = (self.size_of_screen_x - (2 * (self.center_of_screen_x))) + 100                               
@@ -127,7 +126,7 @@ class SettingsScene(Scene):
                                       position = girl_button_position,
                                       scale = 0.3)    
         
-        # This shows settings title label                                                                                                                                   
+        # This shows settings label                                                                                                                                   
         settings_title_position = Vector2()
         settings_title_position.y = self.size_of_screen_y - 100
         settings_title_position.x = self.center_of_screen_x                      
@@ -155,7 +154,8 @@ class SettingsScene(Scene):
                                        color = 'black',
                                        parent = self,
                                        position = sound_effects_label_position)      
-                                                                                                                        
+        
+        # This shows 'Choose Character' label                                                                                                                                                                                                                                
         character_gender_label_position = Vector2()   
         character_gender_label_position.y = self.size_of_screen_y - 200
         character_gender_label_position.x = self.size_of_screen_x - 260                                                
@@ -184,7 +184,8 @@ class SettingsScene(Scene):
                               parent = self,
                               color = 'black',
                               position = girl_label_position)   
-                              
+        
+        # This shows the robber that is chosen (boy is default)                                         
         robber_position = Vector2()
         robber_position.y = self.center_of_screen_y - 150
         robber_position.x = self.center_of_screen_x + 260                
@@ -203,9 +204,68 @@ class SettingsScene(Scene):
     
     def touch_moved(self, touch):
         # this method is called, when user moves a finger around on the screen
+        pass        
+    
+    def touch_ended(self, touch):
+        # this method is called, when user releases a finger from the screen
+        
+        # This transitions to main menu scene
+        if self.back_arrow_button.frame.contains_point(touch.location):
+           sound.play_effect('8ve:8ve-tap-mellow')
+           self.dismiss_modal_scene()
+        
+        # This plays music (turns on music)
+        if self.music_button.frame.contains_point(touch.location):
+           sound.play_effect('8ve:8ve-tap-mellow')
+           config.main_menu_music.play()
+           config.music_on = True
+        # This stops music (turns off music)   
+        if self.no_music_button.frame.contains_point(touch.location):
+           sound.play_effect('8ve:8ve-tap-mellow')
+           config.main_menu_music.pause()
+           config.music_on = False
+           
+        # This allows sound effects (turns on sound effects)
+        if self.sound_effects_button.frame.contains_point(touch.location):     
+           sound.set_volume(50)     
+           sound.play_effect('8ve:8ve-tap-mellow')       
+           config.sound_effects_on = True  
+        # This does not allow sound effects (turns off sound effects)  
+        if self.no_sound_effects_button.frame.contains_point(touch.location):
+           sound.play_effect('8ve:8ve-tap-mellow')
+           sound.set_volume(0)
+           config.sound_effects_on = False           
+        
+        # This displays the girl robber and sets it as player for game   
+        if self.girl_button.frame.contains_point(touch.location):
+           sound.play_effect('8ve:8ve-tap-mellow')
+           self.girl_button_down = True
+           self.choose_character()	 
+        # This displays the boy robber and sets it as player for game   
+        elif self.boy_button.frame.contains_point(touch.location):
+           sound.play_effect('8ve:8ve-tap-mellow')
+           self.girl_button_down = False
+           self.choose_character()                  
+    
+    def did_change_size(self):
+        # this method is called, when user changes the orientation of the screen
+        # thus changing the size of each dimension
         pass
+    
+    def pause(self):
+        # this method is called, when user touches the home button
+        # save anything before app is put to background
+        pass
+    
+    def resume(self):
+        # this method is called, when user place app from background 
+        # back into use. Reload anything you might need.
+        pass   
         
     def choose_character(self):
+        # This displays the type of robber that was chosen (girl or boy)
+        
+        # This displays girl robber
         if self.choose_character_button_touched_once == True and self.girl_button_down == True:  
            self.robber.remove_from_parent()  
            config.gender_type = './assets/sprites/girl_thief.PNG'
@@ -227,7 +287,9 @@ class SettingsScene(Scene):
                                     parent = self, 
                                     position = robber_position,
                                     scale = 0.15)  
-           self.girl_button_down == False                                     
+           self.girl_button_down == False  
+           
+        # This displays boy robber                                                                         
         if self.choose_character_button_touched_once == True and self.girl_button_down == False:  
            self.robber.remove_from_parent()  
            config.gender_type = './assets/sprites/boy_thief.PNG'
@@ -247,53 +309,4 @@ class SettingsScene(Scene):
            self.robber = SpriteNode(config.gender_type,
                                     parent = self, 
                                     position = robber_position,
-                                    scale = 0.135)  
-
-    def touch_ended(self, touch):
-        # this method is called, when user releases a finger from the screen
-        pass
-        
-        if self.back_arrow_button.frame.contains_point(touch.location):
-           sound.play_effect('8ve:8ve-tap-mellow')
-           self.dismiss_modal_scene()
-        
-        if self.music_button.frame.contains_point(touch.location):
-           sound.play_effect('8ve:8ve-tap-mellow')
-           config.main_menu_music.play()
-           config.music_on = True
-        if self.no_music_button.frame.contains_point(touch.location):
-           sound.play_effect('8ve:8ve-tap-mellow')
-           config.main_menu_music.pause()
-           config.music_on = False
-        if self.sound_effects_button.frame.contains_point(touch.location):     
-           sound.set_volume(50)     
-           sound.play_effect('8ve:8ve-tap-mellow')       
-           config.sound_effects_on = True    
-        if self.no_sound_effects_button.frame.contains_point(touch.location):
-           sound.play_effect('8ve:8ve-tap-mellow')
-           sound.set_volume(0)
-           config.sound_effects_on = False           
-           
-        if self.girl_button.frame.contains_point(touch.location):
-           sound.play_effect('8ve:8ve-tap-mellow')
-           self.girl_button_down = True
-           self.choose_character()	 
-        elif self.boy_button.frame.contains_point(touch.location):
-           sound.play_effect('8ve:8ve-tap-mellow')
-           self.girl_button_down = False
-           self.choose_character()                  
-    
-    def did_change_size(self):
-        # this method is called, when user changes the orientation of the screen
-        # thus changing the size of each dimension
-        pass
-    
-    def pause(self):
-        # this method is called, when user touches the home button
-        # save anything before app is put to background
-        pass
-    
-    def resume(self):
-        # this method is called, when user place app from background 
-        # back into use. Reload anything you might need.
-        pass            
+                                    scale = 0.135)                      

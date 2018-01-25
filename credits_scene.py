@@ -1,7 +1,7 @@
 # Created by: Shuvaethy Neill
 # Created on: Jan 2017
 # Created for: ICS3U
-# This scene shows the main menu.
+# This scene shows the credits scene.
 
 from scene import *
 import sound
@@ -20,11 +20,15 @@ class CreditsScene(Scene):
         self.center_of_screen_y = self.size_of_screen_y/2 
         self.scale_size = 0.4
         
+        # This allows sound effects to play or not play 
+        #  depending on whether sound effects is on or off (controlled in settings scene)
         if config.sound_effects_on == True:
            sound.set_volume(50)
         elif config.sound_effects_on == False:
            sound.set_volume(0)
         
+        # This allows music to play or not play 
+        #  depending on whether music is on or off (controlled in settings scene)
         if config.music_on == True:
            config.main_menu_music.play()
         elif config.music_on == False:
@@ -35,7 +39,8 @@ class CreditsScene(Scene):
         	                           position = self.size / 2, 
                                      parent = self, 
                                      size = self.size)
-                                     
+        
+        # add bush in right (for background)                                                       
         bush_position = Vector2()
         bush_position.y = (self.size_of_screen_y - (2 * (self.center_of_screen_y))) + 100
         bush_position.x = self.size_of_screen_x - 100                           
@@ -43,7 +48,8 @@ class CreditsScene(Scene):
                                parent = self, 
                                position = bush_position,
                                scale = 0.45)       
-                                       
+        
+        # add bush in left (for background)                                                              
         bush_2_position = Vector2()
         bush_2_position.y = (self.size_of_screen_y - (2 * (self.center_of_screen_y))) + 100
         bush_2_position.x = (self.size_of_screen_x - (2 * (self.center_of_screen_x))) + 100                               
@@ -51,7 +57,8 @@ class CreditsScene(Scene):
                                  parent = self, 
                                  position = bush_2_position,
                                  scale = 0.45)                                                                                                                                                                                                                     
-                                                       
+        
+        # This shows credits label                                                                                             
         credits_title_position = Vector2()
         credits_title_position.y = self.center_of_screen_y + 270
         credits_title_position.x = self.center_of_screen_x                      
@@ -59,7 +66,8 @@ class CreditsScene(Scene):
                                         parent = self, 
                                         position = credits_title_position,
                                         scale = 0.45)   
-                                       
+        
+        # This shows home button                                                               
         home_button_position = Vector2()
         home_button_position.y = self.size_of_screen_y - 70
         home_button_position.x = (self.size_of_screen_x - (2 * (self.center_of_screen_x))) + 100                   
@@ -67,7 +75,8 @@ class CreditsScene(Scene):
                                       parent = self, 
                                       position = home_button_position,
                                       scale = 0.25)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-    
+        
+        # This shows 'Made by: ' label
         made_by_label_position = Vector2()   
         made_by_label_position.y = self.center_of_screen_y - -120
         made_by_label_position.x = self.center_of_screen_x - 0                                            
@@ -75,8 +84,9 @@ class CreditsScene(Scene):
                                        font = ('Copperplate', 45),
                                        color = 'black',
                                        parent = self,
-                                       position = made_by_label_position)     
-    
+                                       position = made_by_label_position)  
+                                          
+        # This shows names
         names_label_position = Vector2()   
         names_label_position.y = self.center_of_screen_y - -60
         names_label_position.x = self.center_of_screen_x - 0                                           
@@ -102,6 +112,7 @@ class CreditsScene(Scene):
         # this method is called, when user releases a finger from the screen
         pass
         
+        # This transitions to main menu scene
         if self.home_button.frame.contains_point(touch.location):
            sound.play_effect('8ve:8ve-tap-mellow')
            self.dismiss_modal_scene()

@@ -5,10 +5,9 @@
 
 from scene import *
 import sound
-import time
-import config
 import ui
 
+import config
 from lose_scene import *
 from win_scene import *
 from numpy import random
@@ -16,35 +15,31 @@ from numpy import random
 class MainGameScene(Scene):        
     
     def setup(self):
-        # this method is called, when user moves to this scene       
-       
-        self.increment = 0
+        # this method is called, when user moves to this scene              
+        
         self.score_position = Vector2()
         self.size_of_screen_x = self.size.x
         self.size_of_screen_y = self.size.y
         self.center_of_screen_x = self.size_of_screen_x/2
-        self.center_of_screen_y = self.size_of_screen_y/2 
-        self.sprite_direction_switched_right = False
-        self.heart_removed = False
-        self.counter = 0
-        self.pause_game = False
-       
+        self.center_of_screen_y = self.size_of_screen_y/2         
         
         self.down_button_down = False
         self.left_button_down = False
         self.up_button_down = False
-        self.right_button_down = False        
+        self.right_button_down = False 
+        self.distance_between_hearts = 0       
         self.table_view_button_down = True
         self.robber_move_speed = 20.0
-        self.missiles = []
-        self.bushes = []
-        self.coins = []
-        self.hearts = []
         self.police_attack_speed = 15.0
         self.police_attack_rate = 2
         self.number_coins_collected = 0
-        self.character_gender = config.gender_type       
         self.stop_missiles = False
+        self.heart_removed = False        
+        self.missiles = []
+        self.bushes = []
+        self.coins = []
+        self.hearts = []                
+        self.character_gender = config.gender_type               
         
         # This allows sound effects to play or to not play 
         # based on whether the play sound effects or no sound effects was pressed (in settings scene)  
@@ -75,7 +70,8 @@ class MainGameScene(Scene):
                                             parent = self, 
                                             position = table_view_button_position,
                                             scale = 0.25)    
-                                                                                                                                             
+        
+        # This shows the bushes and coins                                                                                                                                                                                                                                                                         
         self.create_bush_and_coins()                    
                                                                                                                    
         # Creates robber sprite                                                           
@@ -124,6 +120,7 @@ class MainGameScene(Scene):
                                        alpha = 0.7,
                                        scale = 0.15)                                                                                          
         
+        # This creates the coin counter
         coin_count_position = Vector2()   
         coin_count_position.y = self.size_of_screen_y - 55
         coin_count_position.x = self.center_of_screen_x + 350                                              
@@ -133,7 +130,8 @@ class MainGameScene(Scene):
                                     parent = self,
                                     position = coin_count_position)     
                                     
-               
+        
+        # This creates a small coin sprite beside coin counter (for aesthetic)              
         coin_count_sprite_position = Vector2()
         coin_count_sprite_position.y = self.size_of_screen_y - 55
         coin_count_sprite_position.x = self.center_of_screen_x + 370                                                             
@@ -141,7 +139,8 @@ class MainGameScene(Scene):
                                             parent = self, 
                                             position = coin_count_sprite_position,
                                             scale = 1.3)                                                             
-                                    
+        
+        # This shows 'Life: ' label                                                  
         life_span_position = Vector2()   
         life_span_position.y = self.size_of_screen_y - 55
         life_span_position.x = self.center_of_screen_x - 270                                                  
@@ -154,22 +153,24 @@ class MainGameScene(Scene):
     def update(self):
         # this method is called, hopefully, 60 times a second
         
+        # This loads a new game scene for corresponding level
         if config.ran_once == True: 
            if config.restart_game == True and config.game_won == True:
               self.setup()             
               config.ran_once = False
-              #self.stop_missiles = False
-                     
+        
+        # This transitions to levels scene                         
         if config.game_over == True or config.game_won == True and config.level_difficulty > 5 or config.game_won == True and config.no_button_pressed == True:
            self.dismiss_modal_scene()   
             
         # Every update it randomly check if new missiles should be created
         missile_create_chance = random.randint(1,30)
         if missile_create_chance <= self.police_attack_rate and self.stop_missiles == False:
-           self.create_new_missile() 
-           self.heart_removed = False
-           sound.play_effect('arcade:Explosion_7')                  
-           
+           self.create_new_missile()            
+           sound.play_effect('arcade:Explosion_7')   
+           self.heart_removed = False               
+        
+        # This allows missiles to be removed once they reach bottom of screen      
         for missile in self.missiles:
             if missile.position.y < self.size_of_screen_y - (2 * (self.center_of_screen_y)) + 40:
                missile.remove_from_parent()
@@ -186,7 +187,7 @@ class MainGameScene(Scene):
            self.robber.run_action(Action.move_by(self.robber_move_speed, 0.0, 0.1))    
                
         # This checks if robber was hit by missile, if so 1 heart is removed from lifespan.
-        # When robber has no more hearts main_game_scene transitions to lose_scene      
+        #  When robber has no more hearts main_game_scene transitions to lose_scene      
         if len(self.missiles) > 0 and len(self.hearts) > 1:
            for missile in self.missiles:
                for heart in self.hearts:
@@ -210,8 +211,7 @@ class MainGameScene(Scene):
                         config.main_game_music.stop()  
                         self.stop_missiles = True
                         self.present_modal_scene(LoseScene())     
-        else:
-           
+        else:           
            pass         	            
         
         # This checks if missile hit a bush, if so it removes missile from screen    
@@ -225,7 +225,7 @@ class MainGameScene(Scene):
                       pass                
         
         # This checks if robber collected a coin, if so 1 point is added to coin counter.
-        # When coin counter is full main_game_scene transitions to win_scene  
+        #  When coin counter is full main_game_scene transitions to win_scene  
         if len(self.coins) > 1:
            for collected_coin in self.coins:
                 if collected_coin.frame.intersects(self.robber.frame):
@@ -254,18 +254,18 @@ class MainGameScene(Scene):
         
         # Checks if up, down, left, or right button was pressed
         if self.left_button.frame.contains_point(touch.location):
-              sound.play_effect('8ve:8ve-tap-mellow')            
-              self.left_button_down = True
-              self.character_turned_left()  
-                                                                                                                
+           sound.play_effect('8ve:8ve-tap-mellow')            
+           self.left_button_down = True
+           # This changes the direction the robber is facing (left)
+           self.character_turned_left()                                                                                                                  
         if self.right_button.frame.contains_point(touch.location):
-              sound.play_effect('8ve:8ve-tap-mellow')            
-              self.right_button_down = True 
-              self.character_turned_right()                                                                                                        
-                         
+           sound.play_effect('8ve:8ve-tap-mellow')            
+           self.right_button_down = True 
+           # This changes the direction the robber is facing (right)
+           self.character_turned_right()                                                                                                                                 
         if self.down_button.frame.contains_point(touch.location):
            sound.play_effect('8ve:8ve-tap-mellow')
-           self.down_button_down = True                 
+           self.down_button_down = True                            
         if self.up_button.frame.contains_point(touch.location):
            sound.play_effect('8ve:8ve-tap-mellow')
            self.up_button_down = True                  
@@ -284,7 +284,7 @@ class MainGameScene(Scene):
         self.down_button_down = False
 
         # This shows a list of buttons for user to change scenes from main game
-        # game is paused in background
+        #  game is paused in background
         if self.table_view_button.frame.contains_point(touch.location) and self.table_view_button_down == True:
            sound.play_effect('8ve:8ve-tap-mellow')                                  
            self.multi_menu_scene()  
@@ -293,7 +293,8 @@ class MainGameScene(Scene):
         
         # This gets rid of blurry background and all buttons so user can return to game         
         if self.table_view_button_down == False:
-           if self.back_arrow_button.frame.contains_point(touch.location):	
+           # This returns back to game
+           if self.back_arrow_button.frame.contains_point(touch.location):	             
               sound.play_effect('8ve:8ve-tap-mellow')    
               self.loading_background .remove_from_parent()
               self.back_arrow_button.remove_from_parent()
@@ -388,7 +389,7 @@ class MainGameScene(Scene):
         
         self.heart_position = Vector2()
         self.heart_position.y = self.size_of_screen_y - 55
-        self.heart_position.x = (self.center_of_screen_x - 200) + self.increment 
+        self.heart_position.x = (self.center_of_screen_x - 200) + self.distance_between_hearts 
                                                             
         self.heart = SpriteNode('plf:HudHeart_full',
                                 parent = self, 
@@ -398,7 +399,7 @@ class MainGameScene(Scene):
         
     def multi_menu_scene(self):  
         # This creates a list of buttons 
-        # and background that make game scene look darker
+        #  and background that make game scene look darker
     	  
     	  # This created 'blurry' black	background
         self.loading_background = SpriteNode(position = self.size / 2, 
@@ -463,16 +464,20 @@ class MainGameScene(Scene):
                                     scale = 0.11)               
                                     
     def create_bush_and_coins(self):	
-        # This creates hearts sprite in which each heart is evenly spaced out
+        # This creates bushes and coins
+        
+        # This creates hearts for lifespan
         for counter in range(0,3):
             self.create_heart() 
-            self.increment = self.increment + 60        
+            self.distance_between_hearts = self.distance_between_hearts + 60        
             
-          # This creates bush and coin sprites in which each bush and coin pair is spaced out proportionately                                                                    
+        # This creates bush and coin sprites in which each bush and coin pair is spaced out proportionately                                                                    
         for counter in range(0,config.level_difficulty):
             self.create_bush()  
             self.create_coin()  
-            
+        
+        # This makes sure that each bush is not touching one another
+        #  if so it recreates a bush with a different location     
         outer_loop_counter = 0
         inner_loop_counter = 0
         while outer_loop_counter < len(self.bushes):
@@ -486,5 +491,4 @@ class MainGameScene(Scene):
                           self.create_bush()
                           self.create_coin()                         
                      inner_loop_counter += 1
-              outer_loop_counter += 1
-                                                                                                                                                                                                                                                                                                        
+              outer_loop_counter += 1                                                                                                                                                                                                                                                                                                    

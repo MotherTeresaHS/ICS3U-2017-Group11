@@ -2,14 +2,13 @@
 # Created on: Nov 2017
 # Created for: ICS3U
 # This scene shows a splash screen for 2 seconds,
-#   then transitions to the main menu.
+#   then transitions to the company logo scene.
 
 from scene import *
 import ui
 import time
 
 from main_menu_scene import *
-
 
 class SplashScene(Scene):
     def setup(self):
@@ -31,7 +30,7 @@ class SplashScene(Scene):
     def update(self):
         # this method is called, hopefully, 60 times a second
         
-        # after 2 seconds, move to main menu scene
+        # after 2 seconds, move to company logo scene
         if not self.presented_scene and time.time() - self.start_time > 1:
             self.present_modal_scene(MainMenuScene())
     

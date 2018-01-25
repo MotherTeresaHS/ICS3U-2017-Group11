@@ -19,6 +19,7 @@ class CompanyLogoScene(Scene):
                                      color = ('black'), 
                                      parent = self, 
                                      size = self.size)
+                                     
         # This shows company logo
         self.company_logo = SpriteNode('./assets/sprites/company_logo.PNG',
         	                             position = self.size / 2, 
@@ -27,7 +28,6 @@ class CompanyLogoScene(Scene):
                                      
         # create timer, so that after 2 seconds move to next scene
         self.start_time = time.time()
-
     
     def update(self):
         # this method is called, hopefully, 60 times a second
